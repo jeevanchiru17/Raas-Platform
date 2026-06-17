@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import RobotsList from './pages/RobotsList';
 import TaskManager from './pages/TaskManager';
 import Billing from './pages/Billing';
+import { LayoutDashboard, Cpu, CheckSquare, CreditCard, Bot } from 'lucide-react';
 
 function App() {
   const [currentPage, setCurrentPage] = React.useState('dashboard');
@@ -18,39 +19,49 @@ function App() {
   return (
     <div className="app">
       <nav className="sidebar">
-        <div className="logo">
-          <h1>🤖 RaaS</h1>
-        </div>
-        <ul className="nav-menu">
-          <li>
-            <a onClick={() => setCurrentPage('dashboard')}
-               className={currentPage === 'dashboard' ? 'active' : ''}
+        <div>
+          <div className="logo">
+            <Bot size={28} />
+            <h1>RAAS PLATFORM</h1>
+          </div>
+          <div className="nav-menu">
+            <button 
+              onClick={() => setCurrentPage('dashboard')}
+              className={`nav-item-btn ${currentPage === 'dashboard' ? 'active' : ''}`}
             >
+              <LayoutDashboard size={20} />
               Dashboard
-            </a>
-          </li>
-          <li>
-            <a onClick={() => setCurrentPage('robots')}
-               className={currentPage === 'robots' ? 'active' : ''}
+            </button>
+            
+            <button 
+              onClick={() => setCurrentPage('robots')}
+              className={`nav-item-btn ${currentPage === 'robots' ? 'active' : ''}`}
             >
-              Robots
-            </a>
-          </li>
-          <li>
-            <a onClick={() => setCurrentPage('tasks')}
-               className={currentPage === 'tasks' ? 'active' : ''}
+              <Cpu size={20} />
+              Robots Fleet
+            </button>
+
+            <button 
+              onClick={() => setCurrentPage('tasks')}
+              className={`nav-item-btn ${currentPage === 'tasks' ? 'active' : ''}`}
             >
-              Tasks
-            </a>
-          </li>
-          <li>
-            <a onClick={() => setCurrentPage('billing')}
-               className={currentPage === 'billing' ? 'active' : ''}
+              <CheckSquare size={20} />
+              Task Manager
+            </button>
+
+            <button 
+              onClick={() => setCurrentPage('billing')}
+              className={`nav-item-btn ${currentPage === 'billing' ? 'active' : ''}`}
             >
+              <CreditCard size={20} />
               Billing
-            </a>
-          </li>
-        </ul>
+            </button>
+          </div>
+        </div>
+        
+        <div className="sidebar-footer">
+          LOCAL ROS v1.0.0
+        </div>
       </nav>
       <main className="main-content">
         {pages[currentPage]}

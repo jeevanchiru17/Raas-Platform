@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Check, CreditCard, Sparkles, Star, Zap } from 'lucide-react';
 
 const Billing = () => {
   const [subscription, setSubscription] = useState(null);
@@ -20,66 +21,121 @@ const Billing = () => {
     fetchBilling();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>LOADING BILLING PORTAL...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="billing-page">
-      <h1>Billing & Subscription</h1>
+      <div className="page-header">
+        <div>
+          <h1>Billing & Subscription</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>Manage platform credits, usage quotas, and tiers</p>
+        </div>
+      </div>
 
       {subscription && (
-        <div className="subscription-card" style={{ padding: '30px', backgroundColor: 'white', borderRadius: '5px', marginBottom: '20px' }}>
-          <h2>Current Plan: <strong>{subscription.plan.toUpperCase()}</strong></h2>
-          <div className="plan-details" style={{ marginTop: '20px' }}>
-            <p><strong>Credits Available:</strong> {subscription.credits - subscription.creditsUsed} / {subscription.credits}</p>
-            <p><strong>Robots Used:</strong> {subscription.robots} / {subscription.robotsLimit}</p>
-            <div style={{ marginTop: '20px' }}>
-              <h3>Features Included:</h3>
-              <ul>
-                {subscription.features.map((feature, idx) => (
-                  <li key={idx} style={{ marginLeft: '20px', marginTop: '5px' }}>✓ {feature}</li>
-                ))}
-              </ul>
+        <div className="glass-panel subscription-panel" style={{ marginBottom: '30px' }}>
+          <div className="sub-info-col">
+            <span className="sub-label">Current Active Plan</span>
+            <span className="sub-value" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)' }}>
+              <Sparkles size={18} />
+              {subscription.plan.toUpperCase()} TIER
+            </span>
+          </div>
+          
+          <div className="sub-info-col">
+            <span className="sub-label">Credits Allocated</span>
+            <span className="sub-value" style={{ fontFamily: 'var(--font-mono)' }}>
+              {subscription.credits - subscription.creditsUsed} / {subscription.credits} Available
+            </span>
+          </div>
+
+          <div className="sub-info-col">
+            <span className="sub-label">Registered Fleet Units</span>
+            <span className="sub-value" style={{ fontFamily: 'var(--font-mono)' }}>
+              {subscription.robots} / {subscription.robotsLimit}
+            </span>
+          </div>
+          
+          <div className="sub-info-col" style={{ width: '100%', borderTop: '1px solid var(--glass-border)', paddingTop: '20px', marginTop: '10px' }}>
+            <span className="sub-label" style={{ marginBottom: '8px', display: 'block' }}>Features Included in Plan:</span>
+            <div style={{ display: 'flex', gap: '25px', flexWrap: 'wrap' }}>
+              {subscription.features.map((feature, idx) => (
+                <span key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', color: 'var(--text-main)' }}>
+                  <Check size={16} style={{ color: 'var(--accent-emerald)' }} />
+                  {feature}
+                </span>
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      <div className="plans-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-        <div className="plan-card" style={{ padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '5px', border: '2px solid #6c757d' }}>
-          <h3>Free</h3>
-          <p className="price" style={{ fontSize: '24px', fontWeight: 'bold', margin: '10px 0' }}>$0/month</p>
-          <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
-            <li style={{ marginTop: '8px' }}>✓ 5 Robots</li>
-            <li style={{ marginTop: '8px' }}>✓ 100 Credits</li>
-            <li style={{ marginTop: '8px' }}>✓ Basic Monitoring</li>
-            <li style={{ marginTop: '8px' }}>✓ 1 GB Storage</li>
-          </ul>
+      {/* Plans Comparison */}
+      <h2 style={{ fontSize: '20px', color: 'var(--text-main)', marginTop: '40px', marginBottom: '10px' }}>Upgrade / Modify Subscription</h2>
+      <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '25px' }}>Choose the computing resources and robot limits that suit your automation pipeline</p>
+
+      <div className="plans-grid">
+        {/* Free Plan */}
+        <div className="glass-panel plan-card">
+          <div>
+            <span className="plan-name">Free Tier</span>
+            <div className="price">$0<span>/month</span></div>
+            <ul className="plan-features">
+              <li><Check size={16} /> 5 Fleet Robots Limit</li>
+              <li><Check size={16} /> 100 Sim Credits/month</li>
+              <li><Check size={16} /> Basic Telemetry Graphs</li>
+              <li><Check size={16} /> Community Forums Support</li>
+            </ul>
+          </div>
+          <button className="modern-btn secondary" disabled style={{ cursor: 'not-allowed' }}>Current Plan</button>
         </div>
 
-        <div className="plan-card" style={{ padding: '20px', backgroundColor: '#e7f3ff', borderRadius: '5px', border: '2px solid #007bff' }}>
-          <h3>Pro</h3>
-          <p className="price" style={{ fontSize: '24px', fontWeight: 'bold', margin: '10px 0', color: '#007bff' }}>$29/month</p>
-          <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
-            <li style={{ marginTop: '8px' }}>✓ 50 Robots</li>
-            <li style={{ marginTop: '8px' }}>✓ 1000 Credits</li>
-            <li style={{ marginTop: '8px' }}>✓ Advanced Analytics</li>
-            <li style={{ marginTop: '8px' }}>✓ 100 GB Storage</li>
-            <li style={{ marginTop: '8px' }}>✓ Priority Support</li>
-          </ul>
-          <button style={{ marginTop: '15px', padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', width: '100%' }}>Upgrade to Pro</button>
+        {/* Pro Plan */}
+        <div className="glass-panel plan-card pro-tier">
+          <div className="pro-badge">Popular</div>
+          <div>
+            <span className="plan-name" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              Pro Automation
+              <Star size={16} style={{ fill: 'var(--accent-purple)', color: 'var(--accent-purple)' }} />
+            </span>
+            <div className="price">$29<span>/month</span></div>
+            <ul className="plan-features">
+              <li><Check size={16} /> 50 Fleet Robots Limit</li>
+              <li><Check size={16} /> 1,000 Sim Credits/month</li>
+              <li><Check size={16} /> Real-time 2D Blueprint Mapping</li>
+              <li><Check size={16} /> Advanced ROS Nodes Logging</li>
+              <li><Check size={16} /> 24/7 Priority Support Desk</li>
+            </ul>
+          </div>
+          <button className="modern-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <Zap size={16} />
+            Upgrade to Pro
+          </button>
         </div>
 
-        <div className="plan-card" style={{ padding: '20px', backgroundColor: '#fff3cd', borderRadius: '5px', border: '2px solid #ffc107' }}>
-          <h3>Enterprise</h3>
-          <p className="price" style={{ fontSize: '24px', fontWeight: 'bold', margin: '10px 0', color: '#ff9800' }}>Custom</p>
-          <ul style={{ listStyle: 'none', paddingLeft: '0' }}>
-            <li style={{ marginTop: '8px' }}>✓ Unlimited Robots</li>
-            <li style={{ marginTop: '8px' }}>✓ Unlimited Credits</li>
-            <li style={{ marginTop: '8px' }}>✓ Full API Access</li>
-            <li style={{ marginTop: '8px' }}>✓ Dedicated Support</li>
-            <li style={{ marginTop: '8px' }}>✓ Custom Integrations</li>
-          </ul>
-          <button style={{ marginTop: '15px', padding: '10px 20px', backgroundColor: '#ff9800', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', width: '100%' }}>Contact Sales</button>
+        {/* Enterprise Plan */}
+        <div className="glass-panel plan-card">
+          <div>
+            <span className="plan-name">Enterprise Suite</span>
+            <div className="price">Custom<span>/quota</span></div>
+            <ul className="plan-features">
+              <li><Check size={16} /> Unlimited Fleet Robots</li>
+              <li><Check size={16} /> Unlimited Sim Credits</li>
+              <li><Check size={16} /> Custom Multi-Robot Swarms</li>
+              <li><Check size={16} /> Complete Platform API Access</li>
+              <li><Check size={16} /> Dedicated Account Engineer</li>
+            </ul>
+          </div>
+          <button className="modern-btn secondary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <CreditCard size={16} />
+            Contact Sales
+          </button>
         </div>
       </div>
     </div>

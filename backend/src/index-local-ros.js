@@ -8,6 +8,21 @@ require('dotenv').config();
 const ROSBridge = require('./ros-bridge');
 const RobotController = require('./robot-controller');
 
+// In-memory databases
+const tasks = [
+  { id: 'task_1', name: 'Inventory transport to Dock B', robotId: 'robot_1', status: 'pending', priority: 'high', dueDate: new Date().toISOString().split('T')[0] },
+  { id: 'task_2', name: 'Charge battery at Station 3', robotId: 'robot_1', status: 'completed', priority: 'medium', dueDate: new Date().toISOString().split('T')[0] }
+];
+
+const subscription = {
+  plan: 'free',
+  credits: 100,
+  creditsUsed: 15,
+  robots: 1,
+  robotsLimit: 5,
+  features: ['Basic monitoring', 'Task scheduling', 'Local ROS Integration']
+};
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
@@ -27,23 +42,43 @@ app.use(express.urlencoded({ extended: true }));
 const rosBridge = new ROSBridge(process.env.ROSBRIDGE_URL || 'ws://localhost:9090');
 const robotController = new RobotController(rosBridge);
 
+// Handle error event to prevent unhandled EventEmitter error crash
+rosBridge.on('error', (err) => {
+  console.error('✗ ROS Bridge Error Event:', err.message || err);
+});
+
 let rosConnected = false;
 
-// Connect to ROS
-(async () => {
-  try {
-    await rosBridge.connect();
-    rosConnected = true;
-    console.log('✓ ROS Bridge connected');
-    
-    // Initialize sample robots
-    await robotController.initializeRobot('robot_1', 'warehouse');
-    console.log('✓ Sample robots initialized');
-  } catch (error) {
-    console.error('✗ Failed to connect to ROS:', error.message);
-    rosConnected = false;
+// Connect to ROS with retries
+async function connectWithRetry() {
+  const maxRetries = 10;
+  let retryCount = 0;
+  
+  while (retryCount < maxRetries) {
+    try {
+      console.log(`Connecting to ROS (attempt ${retryCount + 1}/${maxRetries})...`);
+      await rosBridge.connect();
+      rosConnected = true;
+      console.log('✓ ROS Bridge connected');
+      
+      // Initialize sample robots
+      await robotController.initializeRobot('robot_1', 'warehouse');
+      console.log('✓ Sample robots initialized');
+      return;
+    } catch (error) {
+      console.error(`✗ Failed to connect to ROS (attempt ${retryCount + 1}):`, error.message || error);
+      rosConnected = false;
+      retryCount++;
+      if (retryCount < maxRetries) {
+        console.log('Retrying in 5 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+    }
   }
-})();
+  console.error('✗ Could not connect to ROS after max retries.');
+}
+
+connectWithRetry();
 
 // Routes
 app.get('/health', (req, res) => {
@@ -117,6 +152,29 @@ app.post('/api/robots/:id/command', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.get('/api/tasks', (req, res) => {
+  res.json(tasks);
+});
+
+app.post('/api/tasks', (req, res) => {
+  const { name, robotId, priority, dueDate } = req.body;
+  const task = {
+    id: `task_${Date.now()}`,
+    name,
+    robotId,
+    priority,
+    dueDate,
+    status: 'pending',
+    createdAt: new Date()
+  };
+  tasks.push(task);
+  res.json({ id: task.id, message: 'Task created', task });
+});
+
+app.get('/api/billing/subscription', (req, res) => {
+  res.json(subscription);
 });
 
 app.get('/api/ros/status', (req, res) => {
