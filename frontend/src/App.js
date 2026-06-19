@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import RobotsList from './pages/RobotsList';
 import TaskManager from './pages/TaskManager';
 import Billing from './pages/Billing';
+import RoboBarista from './pages/RoboBarista';
 
 function App() {
   const [currentPage, setCurrentPage] = React.useState('dashboard');
@@ -12,7 +13,8 @@ function App() {
     dashboard: <Dashboard />,
     robots: <RobotsList />,
     tasks: <TaskManager />,
-    billing: <Billing />
+    billing: <Billing />,
+    barista: <RoboBarista />
   };
 
   return (
@@ -34,6 +36,13 @@ function App() {
                className={currentPage === 'robots' ? 'active' : ''}
             >
               Robots
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setCurrentPage('barista')}
+               className={currentPage === 'barista' ? 'active' : ''}
+            >
+              Robo Barista
             </a>
           </li>
           <li>
