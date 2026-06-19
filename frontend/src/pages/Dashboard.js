@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Cpu, Activity, ListTodo, Zap } from 'lucide-react';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -45,43 +46,113 @@ const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)' }}>
+        [LNK_ESTABLISHING_COMMUNICATIONS...]
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">
-      <h1>Dashboard</h1>
+      <div className="page-header">
+        <h1>Operations Dashboard</h1>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--accent-cyan)' }}>
+          SYSTEM NODE: ONLINE
+        </div>
+      </div>
       
-      <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
-        <div className="stat-card" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-          <h3>Total Robots</h3>
-          <p className="stat-value" style={{ fontSize: '32px', fontWeight: 'bold', color: '#007bff' }}>{stats.totalRobots}</p>
+      <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '35px' }}>
+        <div className="cyber-panel" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ padding: '12px', background: 'rgba(0, 240, 255, 0.1)', borderRadius: '8px', color: 'var(--accent-cyan)' }}>
+            <Cpu size={28} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)' }}>Total Fleet</h3>
+            <p style={{ fontSize: '32px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: '#fff', marginTop: '4px' }}>{stats.totalRobots}</p>
+          </div>
         </div>
-        <div className="stat-card" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-          <h3>Active Robots</h3>
-          <p className="stat-value" style={{ fontSize: '32px', fontWeight: 'bold', color: '#28a745' }}>{stats.activeRobots}</p>
+
+        <div className="cyber-panel" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ padding: '12px', background: 'rgba(57, 255, 20, 0.1)', borderRadius: '8px', color: 'var(--accent-green)', animation: 'pulse-green 3s infinite' }}>
+            <Activity size={28} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)' }}>Active Nodes</h3>
+            <p style={{ fontSize: '32px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: 'var(--accent-green)', marginTop: '4px' }}>{stats.activeRobots}</p>
+          </div>
         </div>
-        <div className="stat-card" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-          <h3>Pending Tasks</h3>
-          <p className="stat-value" style={{ fontSize: '32px', fontWeight: 'bold', color: '#ffc107' }}>{stats.pendingTasks}</p>
+
+        <div className="cyber-panel" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ padding: '12px', background: 'rgba(255, 170, 68, 0.1)', borderRadius: '8px', color: 'var(--accent-gold)' }}>
+            <ListTodo size={28} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)' }}>Queued Tasks</h3>
+            <p style={{ fontSize: '32px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: 'var(--accent-gold)', marginTop: '4px' }}>{stats.pendingTasks}</p>
+          </div>
         </div>
-        <div className="stat-card" style={{ padding: '20px', backgroundColor: 'white', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-          <h3>Credits Available</h3>
-          <p className="stat-value" style={{ fontSize: '32px', fontWeight: 'bold', color: '#17a2b8' }}>{stats.totalCredits}</p>
+
+        <div className="cyber-panel" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ padding: '12px', background: 'rgba(189, 0, 255, 0.1)', borderRadius: '8px', color: 'var(--accent-purple)' }}>
+            <Zap size={28} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)' }}>Core Credits</h3>
+            <p style={{ fontSize: '32px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: 'var(--accent-purple)', marginTop: '4px' }}>{stats.totalCredits}</p>
+          </div>
         </div>
       </div>
 
-      <div className="chart-container" style={{ backgroundColor: 'white', padding: '20px', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-        <h2>Robot Battery Levels</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={telemetryData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="battery" stroke="#007bff" />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="cyber-panel">
+        <h2 className="cyber-title">
+          <Activity size={20} style={{ color: 'var(--accent-cyan)' }} />
+          Fleet Telemetry Graph
+        </h2>
+        <div style={{ width: '100%', height: 350, marginTop: '20px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={telemetryData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="cyanGlow" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--accent-cyan)" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="var(--accent-cyan)" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="rgba(0, 240, 255, 0.06)" strokeDasharray="4 4" />
+              <XAxis 
+                dataKey="time" 
+                stroke="var(--text-muted)" 
+                tick={{ fill: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }} 
+              />
+              <YAxis 
+                stroke="var(--text-muted)" 
+                tick={{ fill: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}
+                domain={[0, 100]}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'rgba(10, 14, 26, 0.95)', 
+                  border: '1px solid var(--panel-border-hover)', 
+                  borderRadius: '6px', 
+                  color: '#fff',
+                  fontFamily: 'var(--font-body)'
+                }}
+                labelStyle={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', marginBottom: '4px' }}
+              />
+              <Legend wrapperStyle={{ fontFamily: 'var(--font-heading)', textTransform: 'uppercase', fontSize: 13, color: 'var(--text-muted)' }} />
+              <Line 
+                type="monotone" 
+                dataKey="battery" 
+                name="Average Battery (%)"
+                stroke="var(--accent-cyan)" 
+                strokeWidth={3}
+                dot={{ stroke: 'var(--accent-cyan)', strokeWidth: 2, r: 4, fill: '#06070d' }}
+                activeDot={{ r: 7, stroke: 'var(--accent-cyan)', strokeWidth: 1, fill: 'var(--accent-cyan)' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
