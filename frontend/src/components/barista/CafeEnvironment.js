@@ -76,6 +76,23 @@ export class CafeEnvironment {
         color: 0xfcfcfc,
         roughness: 0.18,
         metalness: 0.1
+      }),
+      chrome: new THREE.MeshStandardMaterial({
+        color: 0xe0e6ed,
+        roughness: 0.1,
+        metalness: 0.95
+      }),
+      accentNeon: new THREE.MeshStandardMaterial({
+        color: 0x5fe1ff,
+        emissive: 0x5fe1ff,
+        emissiveIntensity: 1.8,
+        roughness: 0.1
+      }),
+      accentOrange: new THREE.MeshStandardMaterial({
+        color: 0xff7733,
+        emissive: 0xff7733,
+        emissiveIntensity: 1.2,
+        roughness: 0.1
       })
     };
   }
