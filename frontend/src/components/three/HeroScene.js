@@ -14,7 +14,8 @@ const HeroScene = () => {
 
     // ─── Scene ───
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0b1511, 0.05); // Match CSS dark green background
+    scene.background = new THREE.Color(0xf5f5f7);
+    scene.fog = new THREE.Fog(0xf5f5f7, 8, 20);
 
     // ─── Camera ───
     const camera = new THREE.PerspectiveCamera(
@@ -23,10 +24,10 @@ const HeroScene = () => {
       0.1,
       100
     );
-    camera.position.set(2.5, 1.8, 4.5);
+    camera.position.set(2.5, 2.25, 4.5);
 
     // ─── Renderer ───
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // Transparent background
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -42,7 +43,7 @@ const HeroScene = () => {
     controls.dampingFactor = 0.05;
     controls.minDistance = 2.5;
     controls.maxDistance = 10;
-    controls.target.set(0, 0.8, 0);
+    controls.target.set(0, 1.25, 0);
     controls.enablePan = false;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
@@ -51,44 +52,42 @@ const HeroScene = () => {
     // Stop auto-rotate on user interaction
     controls.addEventListener('start', () => { controls.autoRotate = false; });
 
-    // ─── Warm Natural Lighting ───
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // ─── Apple-style Lighting ───
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfffaed, 1.8);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
     keyLight.position.set(4, 8, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(1024, 1024);
+    keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.camera.near = 0.1;
     keyLight.shadow.camera.far = 25;
     keyLight.shadow.bias = -0.0001;
     keyLight.shadow.radius = 4;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xd4eedd, 0.85); // soft green fill
+    const fillLight = new THREE.DirectionalLight(0xdde4ff, 0.5);
     fillLight.position.set(-5, 3, -3);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffdfb3, 0.6); // warm sunset rim light
+    const rimLight = new THREE.DirectionalLight(0xffeedd, 0.4);
     rimLight.position.set(-2, 2, -5);
     scene.add(rimLight);
 
-    const bottomLight = new THREE.PointLight(0x1de9b6, 0.8, 10); // bioluminescent seafoam accent
+    const bottomLight = new THREE.PointLight(0x0071e3, 0.15, 10);
     bottomLight.position.set(0, -1, 2);
     scene.add(bottomLight);
 
-    // ─── Ground Plane (dark glass reflection) ───
+    // ─── Ground Plane (reflection) ───
     const planeGeometry = new THREE.PlaneGeometry(20, 20);
     const planeMaterial = new THREE.MeshStandardMaterial({
-      color: 0x050c09, // dark green glass
-      roughness: 0.15,
-      metalness: 0.9,
-      transparent: true,
-      opacity: 0.8
+      color: 0xf5f5f7,
+      roughness: 0.85,
+      metalness: 0.05,
     });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.rotation.x = -Math.PI / 2;
-    plane.position.y = -0.02;
+    plane.position.y = 0.43;
     plane.receiveShadow = true;
     scene.add(plane);
 
@@ -97,11 +96,11 @@ const HeroScene = () => {
     const shadowMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.15,
     });
     const contactShadow = new THREE.Mesh(shadowGeometry, shadowMaterial);
     contactShadow.rotation.x = -Math.PI / 2;
-    contactShadow.position.y = 0.005;
+    contactShadow.position.y = 0.455;
     scene.add(contactShadow);
 
     // ─── Floating Particles ───
@@ -115,7 +114,7 @@ const HeroScene = () => {
     }
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particlesMaterial = new THREE.PointsMaterial({
-      color: 0x1de9b6, // Seafoam green particles
+      color: 0x0071e3,
       size: 0.025,
       transparent: true,
       opacity: 0.4,
@@ -146,7 +145,7 @@ const HeroScene = () => {
         // Center the model
         const center = box.getCenter(new THREE.Vector3());
         modelGroup.position.sub(center.clone().multiplyScalar(scale));
-        modelGroup.position.y += 0.02; // just above ground
+        modelGroup.position.y += 0.47; // just above ground
 
         // Enable shadows on all meshes
         modelGroup.traverse((child) => {
@@ -253,21 +252,21 @@ const HeroScene = () => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 10,
-            background: '#0b1511', // Dark moss green background
+            background: '#f5f5f7',
           }}
         >
           <div
             style={{
               width: '40px',
               height: '40px',
-              border: '3px solid rgba(29, 233, 182, 0.15)',
-              borderTop: '3px solid #1de9b6', // Seafoam green spinner
+              border: '3px solid rgba(0, 113, 227, 0.15)',
+              borderTop: '3px solid #0071e3',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
               marginBottom: '16px',
             }}
           />
-          <div style={{ fontSize: '14px', color: '#a3b8b0', fontWeight: 500 }}>
+          <div style={{ fontSize: '14px', color: '#86868b', fontWeight: 500 }}>
             Loading Model... {loadProgress}%
           </div>
         </div>
