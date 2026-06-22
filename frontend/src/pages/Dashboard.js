@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Cpu, Activity, ListTodo, Zap } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -16,8 +17,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const robotsRes = await axios.get('http://localhost:5000/api/robots');
-        const tasksRes = await axios.get('http://localhost:5000/api/tasks');
+        const robotsRes = await axios.get(`${API_BASE_URL}/api/robots`);
+        const tasksRes = await axios.get(`${API_BASE_URL}/api/tasks`);
 
         setStats({
           totalRobots: robotsRes.data.length,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CreditCard, Check, Award } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 const Billing = () => {
   const [subscription, setSubscription] = useState(null);
@@ -9,7 +10,7 @@ const Billing = () => {
   useEffect(() => {
     const fetchBilling = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/billing/subscription');
+        const res = await axios.get(`${API_BASE_URL}/api/billing/subscription`);
         setSubscription(res.data);
         setLoading(false);
       } catch (error) {
