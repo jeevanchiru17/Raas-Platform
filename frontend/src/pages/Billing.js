@@ -180,15 +180,15 @@ const Billing = () => {
 
       {subscription && (
         <div className="cyber-panel" style={{ marginBottom: '28px', padding: '28px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: '20px', marginBottom: '24px' }}>
             <div>
-              <span style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>CURRENT ACTIVE SUBSCRIPTION</span>
-              <h2 style={{ fontSize: '26px', fontWeight: 'bold', fontFamily: 'var(--font-heading)', color: '#fff', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Plan: <span style={{ color: subscription.plan === 'pro' ? 'var(--accent-cyan)' : subscription.plan === 'enterprise' ? 'var(--accent-gold)' : 'var(--text-muted)' }}>{subscription.plan}</span>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontWeight: 'bold' }}>CURRENT ACTIVE SUBSCRIPTION</span>
+              <h2 style={{ fontSize: '26px', fontWeight: 'bold', fontFamily: 'var(--font-heading)', color: '#1d1d1f', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Plan: <span style={{ color: subscription.plan === 'pro' ? 'var(--accent-cyan)' : subscription.plan === 'enterprise' ? 'var(--accent-gold)' : '#1d1d1f' }}>{subscription.plan}</span>
               </h2>
             </div>
             
-            <div style={{ background: 'rgba(0, 240, 255, 0.08)', border: '1px solid var(--panel-border-hover)', borderRadius: '6px', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
+            <div style={{ background: 'rgba(0, 113, 227, 0.08)', border: '1px solid var(--panel-border-hover)', borderRadius: '6px', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 'bold' }}>
               <Award size={18} />
               SYSTEM PROTOCOL STATUS: ACTIVE
             </div>
@@ -196,34 +196,34 @@ const Billing = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <h3 style={{ fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)' }}>Resource Quotas</h3>
+              <h3 style={{ fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#424245', fontWeight: 'bold' }}>Resource Quotas</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontFamily: 'var(--font-mono)' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Credits Remaining</span>
-                  <span style={{ color: '#fff' }}>{subscription.credits - subscription.creditsUsed} / {subscription.credits} CR</span>
+                  <span style={{ color: '#424245', fontWeight: '600' }}>Credits Remaining</span>
+                  <span style={{ color: '#1d1d1f', fontWeight: 'bold' }}>{subscription.credits - subscription.creditsUsed} / {subscription.credits} CR</span>
                 </div>
-                <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '8px', background: 'rgba(0,0,0,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ width: `${creditsPercentage}%`, height: '100%', background: 'var(--accent-cyan)', borderRadius: '4px' }}></div>
                 </div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontFamily: 'var(--font-mono)' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Nodes Active</span>
-                  <span style={{ color: '#fff' }}>{subscription.robots} / {subscription.robotsLimit} Units</span>
+                  <span style={{ color: '#424245', fontWeight: '600' }}>Nodes Active</span>
+                  <span style={{ color: '#1d1d1f', fontWeight: 'bold' }}>{subscription.robots} / {subscription.robotsLimit} Units</span>
                 </div>
-                <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '8px', background: 'rgba(0,0,0,0.06)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ width: `${robotsPercentage}%`, height: '100%', background: 'var(--accent-green)', borderRadius: '4px' }}></div>
                 </div>
               </div>
             </div>
 
             <div>
-              <h3 style={{ fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-muted)', marginBottom: '15px' }}>Included Core Access Features</h3>
+              <h3 style={{ fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#424245', marginBottom: '15px', fontWeight: 'bold' }}>Included Core Access Features</h3>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
                 {subscription.features.map((feature, idx) => (
-                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1d1d1f', fontWeight: '500' }}>
                     <Check size={16} style={{ color: 'var(--accent-green)' }} />
                     {feature}
                   </li>
@@ -258,17 +258,17 @@ const Billing = () => {
             }}
           >
             {plan.recommended && (
-              <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0, 240, 255, 0.15)', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', borderRadius: '4px', fontSize: '11px', padding: '2px 8px', fontFamily: 'var(--font-mono)' }}>RECOMMENDED</div>
+              <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0, 240, 255, 0.15)', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', borderRadius: '4px', fontSize: '11px', padding: '2px 8px', fontFamily: 'var(--font-mono)', fontWeight: 'bold' }}>RECOMMENDED</div>
             )}
             <div>
-              <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: plan.accent }}>{plan.tier}</span>
-              <h3 style={{ fontSize: '22px', fontFamily: 'var(--font-heading)', textTransform: 'uppercase', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>{plan.name}</h3>
-              <p style={{ fontSize: '26px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', margin: '12px 0', color: plan.accent }}>{plan.price}<span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{plan.period}</span></p>
+              <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: plan.accent, fontWeight: 'bold' }}>{plan.tier}</span>
+              <h3 style={{ fontSize: '22px', fontFamily: 'var(--font-heading)', textTransform: 'uppercase', fontWeight: 'bold', color: '#1d1d1f', marginTop: '4px' }}>{plan.name}</h3>
+              <p style={{ fontSize: '26px', fontWeight: 'bold', fontFamily: 'var(--font-mono)', margin: '12px 0', color: plan.accent }}>{plan.price}<span style={{ fontSize: '14px', color: '#6e6e73' }}>{plan.period}</span></p>
             </div>
             
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '14px', flex: 1 }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '14px', flex: 1 }}>
               {plan.features.map((feat, idx) => (
-                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1d1d1f', fontWeight: '500' }}>
                   <Check size={16} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
                   {feat}
                 </li>
@@ -302,12 +302,13 @@ const Billing = () => {
                 opacity: (plan.name === 'Free' && (subscription?.plan || 'free') === 'free') ? 0.6 : 1,
                 ...(plan.name === 'Enterprise' ? {
                   background: 'linear-gradient(135deg, var(--accent-gold) 0%, rgba(255, 170, 68, 0.5) 100%)',
-                  boxShadow: '0 0 10px rgba(255, 170, 68, 0.3)'
+                  boxShadow: '0 0 10px rgba(255, 170, 68, 0.3)',
+                  color: '#1d1d1f'
                 } : {}),
                 ...(plan.name === 'Free' && (subscription?.plan || 'free') === 'free' ? {
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: 'var(--text-muted)'
+                  background: 'rgba(0, 0, 0, 0.04)',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  color: '#6e6e73'
                 } : {})
               }}
             >
