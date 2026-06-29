@@ -113,8 +113,8 @@ const Billing = () => {
       name: 'Free',
       price: '$0',
       period: '/month',
-      accent: 'var(--text-muted)',
-      borderColor: 'var(--text-muted)',
+      accent: '#6e6e73',
+      borderColor: '#d2d2d7',
       features: ['5 Active Robots', '100 Monthly Credits', 'Basic Monitoring', '1 GB Data Storage']
     },
     {
@@ -129,6 +129,15 @@ const Billing = () => {
     },
     {
       tier: 'TIER 03',
+      name: 'Business',
+      price: '$50',
+      period: '/month',
+      accent: '#af52de',
+      borderColor: '#af52de',
+      features: ['150 Active Robots', '3000 Monthly Credits', 'Team Workspace & RBAC', '500 GB Data Storage', '24/7 Priority SLA & Support']
+    },
+    {
+      tier: 'TIER 04',
       name: 'Enterprise',
       price: 'CUSTOM',
       period: '',
@@ -281,14 +290,14 @@ const Billing = () => {
                 const currentPlan = subscription?.plan || 'free';
                 if (plan.name === 'Enterprise') {
                   window.location.href = 'mailto:support@smaratara.com?subject=Enterprise%20Plan%20Inquiry';
-                } else if (plan.name === 'Pro') {
-                  if (currentPlan === 'pro') {
+                } else if (plan.name === 'Pro' || plan.name === 'Business') {
+                  if (currentPlan === plan.name.toLowerCase()) {
                     handleManagePortal();
                   } else {
                     handleUpgrade();
                   }
                 } else if (plan.name === 'Free') {
-                  if (currentPlan === 'pro') {
+                  if (currentPlan !== 'free') {
                     handleManagePortal();
                   }
                 }
@@ -300,6 +309,11 @@ const Billing = () => {
                 height: '42px',
                 cursor: (plan.name === 'Free' && (subscription?.plan || 'free') === 'free') ? 'not-allowed' : 'pointer',
                 opacity: (plan.name === 'Free' && (subscription?.plan || 'free') === 'free') ? 0.6 : 1,
+                ...(plan.name === 'Business' ? {
+                  background: 'linear-gradient(135deg, #af52de 0%, #7c3aed 100%)',
+                  boxShadow: '0 0 12px rgba(175, 82, 222, 0.3)',
+                  color: '#ffffff'
+                } : {}),
                 ...(plan.name === 'Enterprise' ? {
                   background: 'linear-gradient(135deg, var(--accent-gold) 0%, rgba(255, 170, 68, 0.5) 100%)',
                   boxShadow: '0 0 10px rgba(255, 170, 68, 0.3)',
@@ -314,9 +328,9 @@ const Billing = () => {
             >
               {plan.name === 'Enterprise' 
                 ? 'Establish Contact' 
-                : plan.name === 'Pro' 
-                  ? ((subscription?.plan || 'free') === 'pro' ? 'Manage Subscription' : 'Activate Pro Protocol') 
-                  : ((subscription?.plan || 'free') === 'free' ? 'Active Protocol' : 'Downgrade (via Portal)')}
+                : (subscription?.plan || 'free') === plan.name.toLowerCase()
+                  ? (plan.name === 'Free' ? 'Active Protocol' : 'Manage Subscription')
+                  : `Activate ${plan.name} Protocol`}
             </button>
           </div>
         ))}

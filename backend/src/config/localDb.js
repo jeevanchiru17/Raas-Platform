@@ -125,6 +125,10 @@ const localDb = {
       sub.credits = 1000;
       sub.robotsLimit = 50;
       sub.features = ['50 Active Robots', '1000 Monthly Credits', 'Advanced Analytics', '100 GB Data Storage', 'Priority 24/7 Support'];
+    } else if (plan === 'business') {
+      sub.credits = 3000;
+      sub.robotsLimit = 150;
+      sub.features = ['150 Active Robots', '3000 Monthly Credits', 'Team Workspace & RBAC', '500 GB Data Storage', '24/7 Priority SLA & Support'];
     } else {
       sub.credits = 100;
       sub.robotsLimit = 10;
