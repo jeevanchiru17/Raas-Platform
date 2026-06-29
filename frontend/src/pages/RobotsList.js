@@ -173,8 +173,8 @@ const RobotsList = () => {
                   {getRobotIcon(robot.type)}
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', fontFamily: 'var(--font-heading)', letterSpacing: '-0.3px' }}>{robot.name}</h3>
-                  <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>{robot.type}</span>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1d1d1f', fontFamily: 'var(--font-heading)', letterSpacing: '-0.3px', margin: 0 }}>{robot.name}</h3>
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', color: '#424245', fontWeight: '600', fontFamily: 'var(--font-mono)' }}>{robot.type}</span>
                 </div>
               </div>
               
