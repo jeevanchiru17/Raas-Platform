@@ -7,7 +7,7 @@ const localDb = require('../config/localDb');
 router.get('/', async (req, res) => {
   try {
     if (!db) {
-      return res.json(localDb.getRobots());
+      return res.json(await localDb.getRobots());
     }
     const robots = await db.collection('robots').get();
     const robotList = robots.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     const { name, type, location } = req.body;
     
     if (!db) {
-      const newRobotObj = localDb.addRobot({ name, type, location });
+      const newRobotObj = await localDb.addRobot({ name, type, location });
       return res.json({ id: newRobotObj.id, message: 'Robot deployed successfully', robot: newRobotObj });
     }
     
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     if (!db) {
-      const robots = localDb.getRobots();
+      const robots = await localDb.getRobots();
       const found = robots.find(r => r.id === req.params.id) || robots[0];
       return res.json(found);
     }

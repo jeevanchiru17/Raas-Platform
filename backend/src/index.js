@@ -9,6 +9,9 @@ const server = http.createServer(app);
 const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
 const io = initSockets(server, corsOrigin);
 
+const { connectDB } = require('./config/mongo');
+connectDB();
+
 // Start Server
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {

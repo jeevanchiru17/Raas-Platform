@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const { isMongoConnected } = require('./mongo');
+const Robot = require('../models/Robot');
+const Task = require('../models/Task');
+const Subscription = require('../models/Subscription');
 
 const dataDir = path.join(__dirname, '../../data');
 const dbFilePath = path.join(dataDir, 'database.json');
@@ -25,12 +29,10 @@ const initialData = {
   }
 };
 
-// Ensure data directory exists
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Read database from disk or initialize
 const loadDatabase = () => {
   try {
     if (fs.existsSync(dbFilePath)) {
@@ -44,7 +46,6 @@ const loadDatabase = () => {
   return { ...initialData };
 };
 
-// Save database to disk
 const saveDatabase = (data) => {
   try {
     fs.writeFileSync(dbFilePath, JSON.stringify(data, null, 2), 'utf8');
@@ -56,11 +57,17 @@ const saveDatabase = (data) => {
 let memoryDb = loadDatabase();
 
 const localDb = {
-  getRobots: () => {
+  getRobots: async () => {
+    if (isMongoConnected()) {
+      try {
+        const docs = await Robot.find().sort({ createdAt: -1 });
+        if (docs.length > 0) return docs;
+      } catch (e) { console.error('Mongo Robot query fallback:', e.message); }
+    }
     return memoryDb.robots || [];
   },
 
-  addRobot: (robotData) => {
+  addRobot: async (robotData) => {
     const newRobot = {
       id: robotData.id || `robot-${Date.now()}`,
       name: robotData.name || 'Alpha-Unit',
@@ -72,14 +79,26 @@ const localDb = {
     };
     memoryDb.robots.unshift(newRobot);
     saveDatabase(memoryDb);
+
+    if (isMongoConnected()) {
+      try {
+        await Robot.create(newRobot);
+      } catch (e) { console.error('Mongo Robot insert fallback:', e.message); }
+    }
     return newRobot;
   },
 
-  getTasks: () => {
+  getTasks: async () => {
+    if (isMongoConnected()) {
+      try {
+        const docs = await Task.find().sort({ createdAt: -1 });
+        if (docs.length > 0) return docs;
+      } catch (e) { console.error('Mongo Task query fallback:', e.message); }
+    }
     return memoryDb.tasks || [];
   },
 
-  addTask: (taskData) => {
+  addTask: async (taskData) => {
     const newTask = {
       id: taskData.id || `task-${Date.now()}`,
       name: taskData.name || 'Autonomous Task',
@@ -91,10 +110,16 @@ const localDb = {
     };
     memoryDb.tasks.unshift(newTask);
     saveDatabase(memoryDb);
+
+    if (isMongoConnected()) {
+      try {
+        await Task.create(newTask);
+      } catch (e) { console.error('Mongo Task insert fallback:', e.message); }
+    }
     return newTask;
   },
 
-  getSubscription: (userId = 'global-user') => {
+  getSubscription: async (userId = 'global-user') => {
     if (!memoryDb.subscriptions[userId]) {
       memoryDb.subscriptions[userId] = {
         plan: 'free',
@@ -107,12 +132,21 @@ const localDb = {
       };
       saveDatabase(memoryDb);
     }
-    // dynamically sync actual active robots count
     memoryDb.subscriptions[userId].robots = memoryDb.robots.length;
+
+    if (isMongoConnected()) {
+      try {
+        let subDoc = await Subscription.findOne({ userId });
+        if (!subDoc) {
+          subDoc = await Subscription.create({ userId, ...memoryDb.subscriptions[userId] });
+        }
+        return subDoc;
+      } catch (e) { console.error('Mongo Subscription fetch fallback:', e.message); }
+    }
     return memoryDb.subscriptions[userId];
   },
 
-  updateSubscription: (userId = 'global-user', plan, stripeCustomerId = null) => {
+  updateSubscription: async (userId = 'global-user', plan, stripeCustomerId = null) => {
     if (!memoryDb.subscriptions[userId]) {
       memoryDb.subscriptions[userId] = {};
     }
@@ -136,6 +170,12 @@ const localDb = {
     }
     sub.robots = memoryDb.robots.length;
     saveDatabase(memoryDb);
+
+    if (isMongoConnected()) {
+      try {
+        await Subscription.findOneAndUpdate({ userId }, sub, { upsert: true });
+      } catch (e) { console.error('Mongo Subscription update fallback:', e.message); }
+    }
     return sub;
   }
 };

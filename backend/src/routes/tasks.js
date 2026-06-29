@@ -6,7 +6,7 @@ const localDb = require('../config/localDb');
 router.get('/', async (req, res) => {
   try {
     if (!db) {
-      return res.json(localDb.getTasks());
+      return res.json(await localDb.getTasks());
     }
     const tasks = await db.collection('tasks').get();
     const taskList = tasks.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
     const { name, robotId, priority, dueDate } = req.body;
     
     if (!db) {
-      const newTaskObj = localDb.addTask({ name, robotId, priority, dueDate });
+      const newTaskObj = await localDb.addTask({ name, robotId, priority, dueDate });
       return res.json({ id: newTaskObj.id, message: 'Task created successfully', task: newTaskObj });
     }
     
