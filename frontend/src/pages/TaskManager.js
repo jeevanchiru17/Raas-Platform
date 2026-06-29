@@ -8,6 +8,7 @@ const TaskManager = () => {
   const [robots, setRobots] = useState([]);
   const [newTask, setNewTask] = useState({ name: '', robotId: '', priority: 'medium', dueDate: '' });
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -31,7 +32,9 @@ const TaskManager = () => {
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
+      const createdName = newTask.name;
       await axios.post(`${API_BASE_URL}/api/tasks`, newTask);
+      setNotification(`TASK SCHEDULED: "${createdName}" successfully queued and active.`);
       setNewTask({ name: '', robotId: '', priority: 'medium', dueDate: '' });
       fetchData();
     } catch (error) {
@@ -93,6 +96,37 @@ const TaskManager = () => {
           QUEUE ACTIVE
         </div>
       </div>
+
+      {notification && (
+        <div style={{
+          padding: '14px 18px',
+          borderRadius: '6px',
+          background: 'rgba(0, 240, 255, 0.1)',
+          border: '1px solid var(--accent-cyan)',
+          color: 'var(--accent-cyan)',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '13px',
+          marginBottom: '24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div>{notification}</div>
+          <button 
+            onClick={() => setNotification(null)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              fontWeight: 'bold'
+            }}
+          >
+            [DISMISS]
+          </button>
+        </div>
+      )}
 
       <div className="cyber-panel" style={{ marginBottom: '28px' }}>
         <h2 className="cyber-title">
