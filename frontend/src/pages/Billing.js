@@ -3,8 +3,18 @@ import axios from 'axios';
 import { CreditCard, Check, Award } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 
+const defaultSubscription = {
+  plan: 'free',
+  credits: 100,
+  creditsUsed: 0,
+  robots: 0,
+  robotsLimit: 10,
+  stripeCustomerId: null,
+  features: ['5 Active Robots', '100 Monthly Credits', 'Basic Monitoring', '1 GB Data Storage']
+};
+
 const Billing = () => {
-  const [subscription, setSubscription] = useState(null);
+  const [subscription, setSubscription] = useState(defaultSubscription);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
 
@@ -33,10 +43,11 @@ const Billing = () => {
     const fetchBilling = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/billing/subscription`);
-        setSubscription(res.data);
+        setSubscription(res.data || defaultSubscription);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching billing:', error);
+        setSubscription(defaultSubscription);
         setLoading(false);
       }
     };
@@ -267,32 +278,33 @@ const Billing = () => {
             <button 
               className="cyber-button" 
               onClick={() => {
+                const currentPlan = subscription?.plan || 'free';
                 if (plan.name === 'Enterprise') {
                   window.location.href = 'mailto:support@smaratara.com?subject=Enterprise%20Plan%20Inquiry';
                 } else if (plan.name === 'Pro') {
-                  if (subscription.plan === 'pro') {
+                  if (currentPlan === 'pro') {
                     handleManagePortal();
                   } else {
                     handleUpgrade();
                   }
                 } else if (plan.name === 'Free') {
-                  if (subscription.plan === 'pro') {
+                  if (currentPlan === 'pro') {
                     handleManagePortal();
                   }
                 }
               }}
-              disabled={plan.name === 'Free' && subscription.plan === 'free'}
+              disabled={plan.name === 'Free' && (subscription?.plan || 'free') === 'free'}
               style={{ 
                 marginTop: 'auto', 
                 width: '100%', 
                 height: '42px',
-                cursor: (plan.name === 'Free' && subscription.plan === 'free') ? 'not-allowed' : 'pointer',
-                opacity: (plan.name === 'Free' && subscription.plan === 'free') ? 0.6 : 1,
+                cursor: (plan.name === 'Free' && (subscription?.plan || 'free') === 'free') ? 'not-allowed' : 'pointer',
+                opacity: (plan.name === 'Free' && (subscription?.plan || 'free') === 'free') ? 0.6 : 1,
                 ...(plan.name === 'Enterprise' ? {
                   background: 'linear-gradient(135deg, var(--accent-gold) 0%, rgba(255, 170, 68, 0.5) 100%)',
                   boxShadow: '0 0 10px rgba(255, 170, 68, 0.3)'
                 } : {}),
-                ...(plan.name === 'Free' && subscription.plan === 'free' ? {
+                ...(plan.name === 'Free' && (subscription?.plan || 'free') === 'free' ? {
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   color: 'var(--text-muted)'
@@ -302,8 +314,8 @@ const Billing = () => {
               {plan.name === 'Enterprise' 
                 ? 'Establish Contact' 
                 : plan.name === 'Pro' 
-                  ? (subscription.plan === 'pro' ? 'Manage Subscription' : 'Activate Pro Protocol') 
-                  : (subscription.plan === 'free' ? 'Active Protocol' : 'Downgrade (via Portal)')}
+                  ? ((subscription?.plan || 'free') === 'pro' ? 'Manage Subscription' : 'Activate Pro Protocol') 
+                  : ((subscription?.plan || 'free') === 'free' ? 'Active Protocol' : 'Downgrade (via Portal)')}
             </button>
           </div>
         ))}

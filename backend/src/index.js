@@ -10,7 +10,7 @@ const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
 const io = initSockets(server, corsOrigin);
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`\n🚀 RaaS Backend running on port ${PORT}`);
   console.log(`📊 GCP Project: ${process.env.GOOGLE_CLOUD_PROJECT || 'Not configured'}`);
