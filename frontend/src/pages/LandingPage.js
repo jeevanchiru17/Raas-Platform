@@ -19,8 +19,8 @@ const LandingPage = ({ onLaunchApp }) => {
       {/* Navigation */}
       <nav className="landing-nav" style={{ background: scrolled ? 'rgba(7,9,14,0.95)' : 'rgba(7,9,14,0.75)' }}>
         <div className="nav-logo">
-          <img src="/logo.png" alt="RaaS Logo" className="nav-logo-img" />
-          <span>Foxglove</span> RaaS
+          <img src="/logo.png" alt="ForaMetric Logo" className="nav-logo-img" />
+          <span>ForaMetric</span>
         </div>
         <ul className="nav-links">
           <li><button className="nav-link-btn">Product</button></li>
@@ -46,7 +46,7 @@ const LandingPage = ({ onLaunchApp }) => {
             from prototype to production.
           </h1>
           <p className="hero-desc">
-            RaaS is the multimodal data platform for robotics and autonomy. Capture and visualize data 
+            ForaMetric is the multimodal data platform for robotics and autonomy. Capture and visualize data 
             from your fleet, search across every log, and curate datasets to train your next model.
           </p>
           <div className="hero-buttons">
@@ -77,7 +77,7 @@ const LandingPage = ({ onLaunchApp }) => {
 
       {/* Customer Logos Bar */}
       <section className="logos-section">
-        <h2>Leading Physical AI companies build with RaaS</h2>
+        <h2>Leading Physical AI companies build with ForaMetric</h2>
         <div className="logos-track">
           <div className="logo-item">AESCAPE</div>
           <div className="logo-item">DEXORY</div>
@@ -242,7 +242,7 @@ const LandingPage = ({ onLaunchApp }) => {
 
       {/* Footer */}
       <footer className="landing-footer">
-        © 2026 Foxglove RaaS Platform. All rights reserved.
+        © 2026 ForaMetric Platform. All rights reserved.
       </footer>
     </div>
   );

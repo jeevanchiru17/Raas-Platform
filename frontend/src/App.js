@@ -43,8 +43,8 @@ function App() {
           >
             <ArrowLeft size={18} />
           </button>
-          <img src="/logo.png" alt="RaaS Logo" className="topbar-logo-img" />
-          <span className="topbar-logo-text">RaaS</span>
+          <img src="/logo.png" alt="ForaMetric Logo" className="topbar-logo-img" />
+          <span className="topbar-logo-text">ForaMetric</span>
         </div>
         <nav className="topbar-nav">
           {navItems.map(item => {
