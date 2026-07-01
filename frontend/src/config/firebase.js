@@ -1,6 +1,6 @@
 // ─── Firebase Client SDK Config ───────────────────────────────────────────
-// Replace the values below with your project's Firebase web config.
-// Get them from: Firebase Console → Project Settings → General → Your apps → Web app
+// Credentials are loaded from .env (REACT_APP_FIREBASE_* variables)
+// Firebase Console: https://console.firebase.google.com/project/forametric
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { initializeApp } from 'firebase/app';
@@ -13,6 +13,7 @@ const firebaseConfig = {
   storageBucket:     process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId:             process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId:     process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -27,3 +28,5 @@ googleProvider.setCustomParameters({ prompt: 'select_account' });
 export const appleProvider = new OAuthProvider('apple.com');
 appleProvider.addScope('email');
 appleProvider.addScope('name');
+
+export default app;
