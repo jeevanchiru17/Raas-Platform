@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { LayoutDashboard, Cpu, ListTodo, CreditCard, ArrowLeft, LogOut } from 'lucide-react';
 import { auth } from '@/config/firebase';
-import { onAuthStateChanged, signOut, User } from 'firebase/auth';
+import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
+import { useAuthStore } from '@/stores/authStore';
+import { useUIStore, type PageId } from '@/stores/uiStore';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import Dashboard from '@/pages/Dashboard';
@@ -10,20 +12,22 @@ import RobotsList from '@/pages/RobotsList';
 import TaskManager from '@/pages/TaskManager';
 import Billing from '@/pages/Billing';
 
-type AppMode = 'landing' | 'login' | 'app';
-type PageId = 'dashboard' | 'robots' | 'tasks' | 'billing';
-
 interface NavItem {
   id: PageId;
   label: string;
   icon: React.ElementType;
 }
 
+const navItems: NavItem[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'robots',    label: 'Fleet',     icon: Cpu },
+  { id: 'tasks',     label: 'Tasks',     icon: ListTodo },
+  { id: 'billing',   label: 'Billing',   icon: CreditCard },
+];
+
 function App() {
-  const [mode, setMode] = useState<AppMode>('landing');
-  const [currentPage, setCurrentPage] = useState<PageId>('dashboard');
-  const [user, setUser] = useState<User | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user, authChecked, setUser, setAuthChecked } = useAuthStore();
+  const { mode, currentPage, setMode, setCurrentPage, navigateToLanding } = useUIStore();
 
   // Persist auth — if already signed in, skip landing/login
   useEffect(() => {
@@ -41,11 +45,10 @@ function App() {
   const handleSignOut = async () => {
     await signOut(auth);
     setUser(null);
-    setMode('landing');
-    setCurrentPage('dashboard');
+    navigateToLanding();
   };
 
-  // While Firebase checks stored session, show nothing (avoid flicker)
+  // While Firebase checks stored session, show spinner
   if (!authChecked) {
     return (
       <div style={{
@@ -89,7 +92,6 @@ function App() {
     );
   }
 
-  // ─── App shell ───
   const pages: Record<PageId, React.ReactNode> = {
     dashboard: <Dashboard />,
     robots:    <RobotsList />,
@@ -97,60 +99,40 @@ function App() {
     billing:   <Billing />,
   };
 
-  const navItems: NavItem[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'robots',    label: 'Fleet',     icon: Cpu },
-    { id: 'tasks',     label: 'Tasks',     icon: ListTodo },
-    { id: 'billing',   label: 'Billing',   icon: CreditCard },
-  ];
-
   return (
     <div className="app">
       <header className="topbar">
         <div className="topbar-brand">
-          <button
-            className="back-btn"
-            onClick={() => setMode('landing')}
-            title="Back to Landing"
-          >
+          <button className="back-btn" onClick={() => setMode('landing')} title="Back to Landing">
             <ArrowLeft size={18} />
           </button>
           <img src="/logo.png" alt="ForaMetric Logo" className="topbar-logo-img" />
           <span className="topbar-logo-text">ForaMetric</span>
         </div>
         <nav className="topbar-nav">
-          {navItems.map(item => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setCurrentPage(item.id)}
-                className={currentPage === item.id ? 'active' : ''}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          {navItems.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setCurrentPage(id)}
+              className={currentPage === id ? 'active' : ''}
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </button>
+          ))}
         </nav>
         <div className="topbar-meta">
-          {user && (
+          {user ? (
             <>
               <span className="status-dot" />
               <span className="status-text">
                 {user.displayName || user.email?.split('@')[0] || 'User'}
               </span>
-              <button
-                className="back-btn"
-                onClick={handleSignOut}
-                title="Sign out"
-                style={{ marginLeft: 4 }}
-              >
+              <button className="back-btn" onClick={handleSignOut} title="Sign out" style={{ marginLeft: 4 }}>
                 <LogOut size={16} />
               </button>
             </>
-          )}
-          {!user && (
+          ) : (
             <>
               <span className="status-dot" />
               <span className="status-text">Online</span>
@@ -158,10 +140,7 @@ function App() {
           )}
         </div>
       </header>
-
-      <main className="main-content">
-        {pages[currentPage]}
-      </main>
+      <main className="main-content">{pages[currentPage]}</main>
     </div>
   );
 }
