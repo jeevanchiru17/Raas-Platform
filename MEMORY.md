@@ -240,29 +240,54 @@ socket.on('task:update', ({ taskId, status, progress }) => {})
 
 | Sprint | Status | Branch | Goal |
 |--------|--------|--------|------|
-| **Sprint 1** | 🔄 In Progress | `feat/sprint-1-foundation` | Vite + TS + Tailwind + Toolchain |
-| **Sprint 2** | ⏳ Pending | `feat/sprint-2-state` | TanStack Query + Zustand |
-| **Sprint 3** | ⏳ Pending | `feat/sprint-3-backend` | Fastify + TypeScript backend |
-| **Sprint 4** | ⏳ Pending | `feat/sprint-4-cicd` | CI/CD + Beta deploy + Go live |
+| **Sprint 1** | ✅ Complete | `feat/sprint-1-foundation` | Vite + TS + Tailwind + Toolchain |
+| **Sprint 2** | ✅ Complete | `feat/sprint-2-state` | TanStack Query + Zustand |
+| **Sprint 3** | ✅ Complete | `feat/sprint-3-backend` | Fastify + TypeScript backend |
+| **Sprint 4** | 🔄 In Progress | `develop` | CI/CD + Beta deploy + Go live |
 
 ### Sprint 1 Checklist
 - [x] Branch `feat/sprint-1-foundation` created & pushed
 - [x] Vite + `@vitejs/plugin-react` + `typescript` + `@types/*` installed
-- [ ] `react-scripts` removed (peer dep conflict — must remove FIRST before other installs)
-- [ ] Tailwind CSS + PostCSS + Autoprefixer installed
-- [ ] `vite.config.ts` created
-- [ ] `tsconfig.json` + `tsconfig.node.json` created
-- [ ] `index.html` at project root (Vite entry point)
-- [ ] `src/main.tsx` (replaces `src/index.js`)
-- [ ] `src/App.tsx` (migrated from `App.js`)
-- [ ] `src/config/firebase.ts` (migrated from `firebase.js`)
-- [ ] `.env` renamed `REACT_APP_` → `VITE_`
-- [ ] `shadcn/ui` base components added (Button, Card, Badge)
-- [ ] `src/lib/utils.ts` (`cn()` helper)
-- [ ] ESLint + Prettier + Husky configured
-- [ ] Vitest + React Testing Library configured
-- [ ] Path alias `@/` → `src/` in Vite + TS config
-- [ ] `npm run dev` boots cleanly on Vite
+- [x] `react-scripts` removed (peer dep conflict resolved)
+- [x] Tailwind CSS + PostCSS + Autoprefixer installed
+- [x] `vite.config.ts` created
+- [x] `tsconfig.json` + `tsconfig.node.json` created
+- [x] `index.html` at project root (Vite entry point)
+- [x] `src/main.tsx` (replaces `src/index.js`)
+- [x] `src/App.tsx` (migrated from `App.js`)
+- [x] `src/config/firebase.ts` (migrated from `firebase.js`)
+- [x] `.env` renamed `REACT_APP_` → `VITE_`
+- [x] `shadcn/ui` base components added (Button, Card, Badge)
+- [x] `src/lib/utils.ts` (`cn()` helper)
+- [x] ESLint + Prettier + Husky configured
+- [x] Vitest + React Testing Library configured
+- [x] Path alias `@/` → `src/` in Vite + TS config
+- [x] `npm run dev` boots cleanly on Vite
+
+### Sprint 2 Checklist
+- [x] Branch `feat/sprint-2-state` created & pushed
+- [x] Zustand stores (`authStore.ts`, `uiStore.ts`) created to replace Redux
+- [x] TanStack Query v5 Client and DevTools set up in `main.tsx`
+- [x] Created typed API layer `src/lib/api.ts` with Axios client & model types
+- [x] Migrated `Dashboard.js` → `Dashboard.tsx` using `useQuery`
+- [x] Migrated `RobotsList.js` → `RobotsList.tsx` using `useQuery` + `useMutation` + Zod schema validation
+- [x] Migrated `TaskManager.js` → `TaskManager.tsx` using `useQuery` + `useMutation` + Zod schema validation
+- [x] App.tsx integrated with Zustand auth & UI stores
+- [x] TypeScript compilation (`tsc --noEmit`) and testing passing successfully
+
+### Sprint 3 Checklist
+- [x] Branch `feat/sprint-3-backend` created & pushed
+- [x] Scaffolded Fastify + TypeScript backend
+- [x] Configured Pino structured logging
+- [x] Migrated auth routes to Fastify plugin + Zod schema validation
+- [x] Migrated robots routes to Fastify plugin + Zod schema validation
+- [x] Migrated tasks routes to Fastify plugin + Zod schema validation
+- [x] Migrated billing routes to Fastify plugin + Webhook raw-body verification support
+- [x] Mounted Socket.io server over Fastify's HTTP server
+- [x] Created centralized request validation schemas in `routes/schemas.ts`
+- [x] Retired all legacy `.js` files to `.js.bak`
+- [x] TypeScript compilation (`tsc --noEmit`) and production build succeed with 0 errors
+
 
 ---
 
