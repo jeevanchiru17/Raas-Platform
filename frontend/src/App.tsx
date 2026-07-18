@@ -11,11 +11,12 @@ import Dashboard from '@/pages/Dashboard';
 import RobotsList from '@/pages/RobotsList';
 import TaskManager from '@/pages/TaskManager';
 import Billing from '@/pages/Billing';
+import type { LucideIcon } from 'lucide-react';
 
 interface NavItem {
   id: PageId;
   label: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
 }
 
 const navItems: NavItem[] = [
