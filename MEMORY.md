@@ -243,7 +243,7 @@ socket.on('task:update', ({ taskId, status, progress }) => {})
 | **Sprint 1** | ✅ Complete | `feat/sprint-1-foundation` | Vite + TS + Tailwind + Toolchain |
 | **Sprint 2** | ✅ Complete | `feat/sprint-2-state` | TanStack Query + Zustand |
 | **Sprint 3** | ✅ Complete | `feat/sprint-3-backend` | Fastify + TypeScript backend |
-| **Sprint 4** | 🔄 In Progress | `develop` | CI/CD + Beta deploy + Go live |
+| **Sprint 4** | ✅ Complete | `feat/sprint-4-cicd` | CI/CD + R3F + Go live |
 
 ### Sprint 1 Checklist
 - [x] Branch `feat/sprint-1-foundation` created & pushed
@@ -288,6 +288,16 @@ socket.on('task:update', ({ taskId, status, progress }) => {})
 - [x] Retired all legacy `.js` files to `.js.bak`
 - [x] TypeScript compilation (`tsc --noEmit`) and production build succeed with 0 errors
 
+### Sprint 4 Checklist
+- [x] Branch `feat/sprint-4-cicd` created & pushed
+- [x] GitHub Actions CI workflow (`.github/workflows/ci.yml`) — lint, type-check, test, build
+- [x] Installed `@react-three/fiber` + `@react-three/drei` in frontend
+- [x] Migrated `RvizView.js` → `RvizView.tsx` (React Three Fiber declarative Canvas)
+- [x] Created `RobotArmComponent` (useFrame-driven joint updates via `<primitive>`)
+- [x] Created `TfLinesComponent` (imperative THREE.Line via `<primitive>`)
+- [x] OrbitControls from @react-three/drei (replaces manual three/examples import)
+- [x] Fixed `App.tsx` NavItem icon type (`LucideIcon`)
+- [x] TypeScript compilation (0 errors) and all tests passing
 
 ---
 
