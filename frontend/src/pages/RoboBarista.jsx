@@ -3,9 +3,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
-import { RobotArm } from '../components/barista/RobotArm.js';
-import { CafeEnvironment } from '../components/barista/CafeEnvironment.js';
-import { audio } from '../components/barista/AudioEngine.js';
+import { RobotArm } from '../components/barista/RobotArm.jsx';
+import { CafeEnvironment } from '../components/barista/CafeEnvironment.jsx';
+import { audio } from '../components/barista/AudioEngine.jsx';
 
 import './RoboBarista.css';
 
@@ -1071,7 +1071,7 @@ const RoboBarista = () => {
                   <div className="progress-bar"><div ref={diagTempBarRef} className="fill" style={{ width: '50%', background: 'var(--cyan)' }}></div></div>
                 </div>
                 <div className="barista-telemetry-card">
-                  <span class="t-label">Heater Power</span>
+                  <span className="t-label">Heater Power</span>
                   <span ref={diagHeaterRef} className="t-value">12%</span>
                   <div className="progress-bar"><div ref={diagHeaterBarRef} className="fill" style={{ width: '12%', background: 'var(--cyan)' }}></div></div>
                 </div>

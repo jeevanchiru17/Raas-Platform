@@ -35,5 +35,47 @@ export default tseslint.config(
     },
   },
 
+  {
+    files: ['**/*.{js,jsx}'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooks,
+    },
+    languageOptions: {
+      globals: {
+        alert: 'readonly',
+        cancelAnimationFrame: 'readonly',
+        console: 'readonly',
+        document: 'readonly',
+        performance: 'readonly',
+        process: 'readonly',
+        requestAnimationFrame: 'readonly',
+        setTimeout: 'readonly',
+        URLSearchParams: 'readonly',
+        window: 'readonly',
+      },
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      // These legacy JavaScript files are being migrated incrementally.
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-empty': 'off',
+      'no-useless-assignment': 'off',
+    },
+  },
+
+  {
+    rules: {
+      // Existing TS code currently triggers this rule without a useful diagnostic.
+      'no-useless-assignment': 'off',
+    },
+  },
+
   prettier,
 );
