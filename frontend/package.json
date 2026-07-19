@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "RaaS Platform Dashboard",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@radix-ui/react-slot": "^1.3.0",
