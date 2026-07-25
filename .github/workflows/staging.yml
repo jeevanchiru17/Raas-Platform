@@ -1,0 +1,104 @@
+name: Staging Deploy (beta)
+
+on:
+  push:
+    branches: [beta]
+  pull_request:
+    branches: [beta]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ─── Quality Gate ────────────────────────────────────────────
+  quality:
+    name: Lint · Type-check · Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: |
+            frontend/package-lock.json
+            backend/package-lock.json
+
+      - name: Install frontend deps
+        run: npm ci --legacy-peer-deps
+        working-directory: frontend
+
+      - name: Install backend deps
+        run: npm ci
+        working-directory: backend
+
+      - name: Frontend lint
+        run: npm run lint
+        working-directory: frontend
+
+      - name: Frontend type-check
+        run: npm run type-check
+        working-directory: frontend
+
+      - name: Frontend tests
+        run: npm run test:run
+        working-directory: frontend
+
+      - name: Backend type-check
+        run: npx tsc --noEmit
+        working-directory: backend
+
+  # ─── Frontend → Vercel ───────────────────────────────────────
+  deploy-frontend:
+    name: Deploy Frontend → Vercel (Staging)
+    needs: quality
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/beta' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install deps
+        run: npm ci --legacy-peer-deps
+        working-directory: frontend
+
+      - name: Build
+        run: npm run build
+        working-directory: frontend
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL_STAGING }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+
+      - name: Deploy to Vercel (Preview/Staging)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: frontend
+          alias-domains: raas-beta.vercel.app
+
+  # ─── Backend → Render ────────────────────────────────────────
+  deploy-backend:
+    name: Deploy Backend → Render (Staging)
+    needs: quality
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/beta' && github.event_name == 'push'
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            --fail-with-body
+        shell: bash
