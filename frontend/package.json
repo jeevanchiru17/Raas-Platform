@@ -38,8 +38,8 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --fix",
     "format": "prettier --write src",
     "format:check": "prettier --check src",
     "prepare": "husky"
