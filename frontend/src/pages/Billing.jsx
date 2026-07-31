@@ -4,7 +4,7 @@ import { CreditCard, Check, Award } from 'lucide-react';
 
 // Use Vercel serverless API routes when deployed (no localhost backend available).
 // Falls back to the local backend only when running locally.
-const apiUrl = process.env.REACT_APP_API_URL || '';
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 const isLocalBackend = apiUrl.includes('localhost') || apiUrl.includes('127.0.0.1');
 const BILLING_API = isLocalBackend ? `${apiUrl}/api/billing` : '/api/billing';
 
