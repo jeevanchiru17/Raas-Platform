@@ -22,17 +22,34 @@ A full-stack, cloud-ready **Robotics-as-a-Service (RaaS)** platform for warehous
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 18, Redux Toolkit, React Router v6 |
-| **Styling** | Vanilla CSS, Glassmorphism, custom animations |
-| **Auth** | Firebase Auth (Email/Password + Google OAuth) |
-| **Real-time** | Socket.io |
-| **Backend** | Node.js, Express |
-| **Database** | Google Cloud Firestore + MongoDB (Mongoose fallback) |
-| **Payments** | Stripe Checkout + Billing Portal |
-| **Deployment** | Vercel (frontend) + Render (backend) |
-| **Serverless** | Vercel API Routes (Stripe billing) |
+### 🎨 Frontend
+- **Framework & Core:** React 18, TypeScript, Vite
+- **State Management:** Redux Toolkit, Zustand, TanStack React Query v5
+- **3D Visualization & Graphics:** Three.js, React Three Fiber (`@react-three/fiber`), `@react-three/drei` (RViz / telemetry renderings)
+- **Styling & UI:** Tailwind CSS v4, Radix UI Slot, Lucide React, Recharts, Glassmorphic CSS design
+- **Form Management & Validation:** React Hook Form, Zod
+- **Real-Time & Integration:** Socket.io Client, Firebase Client SDK
+
+### ⚙️ Backend & APIs
+- **Runtime & Language:** Node.js (>=18), TypeScript (`tsx` / `tsc`)
+- **Web Frameworks:** Express.js, Fastify (Fastify CORS, Fastify Helmet, Fastify Zod provider)
+- **Robotics Integration:** `roslib` (ROSBridge WebSocket communication with ROS/ROS2 nodes)
+- **Cloud Services & Real-time:** Socket.io, Google Cloud Pub/Sub, Google Cloud Logging
+- **Authentication & Security:** Firebase Admin SDK, JWT (`jsonwebtoken`), BcryptJS, Helmet, Zod
+
+### 🗄️ Database & Storage
+- **Primary Database:** Google Cloud Firestore
+- **Secondary / Fallback:** MongoDB (Mongoose 9)
+- **Development Fallback:** Zero-config Local JSON DB
+
+### 💳 Payments & Billing
+- **Payment Gateway:** Stripe Checkout API & Customer Billing Portal
+- **Serverless API:** Vercel Serverless Functions (`/api/billing`)
+
+### 🐳 DevOps, Infrastructure & Testing
+- **Containers & Orchestration:** Docker, Docker Compose (`ros:noetic-ros-core` bridge), Kubernetes (GKE manifests)
+- **Deployment & Hosting:** Vercel (Frontend & Serverless API), Render (Backend API Web Service), GCP Cloud Build
+- **Testing & Quality Assurance:** Vitest, Testing Library (React & Jest DOM), Jest, ESLint 9, Prettier, Husky, lint-staged
 
 ---
 
